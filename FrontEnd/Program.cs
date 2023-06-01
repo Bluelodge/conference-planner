@@ -19,6 +19,13 @@ builder.Services.AddHealthChecks()
     .AddCheck<BackendHealthCheck>("backend")
     .AddDbContextCheck<IdentityDbContext>();
 
+// Google OAuth
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+});
+
 // Identity
 services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<IdentityDbContext>()
