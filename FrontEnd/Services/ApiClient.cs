@@ -128,5 +128,19 @@ public class ApiClient : IApiClient
         return await response.Content.ReadFromJsonAsync<List<SearchResult>>() ?? new();
     }
 
+    // Health
+    public async Task<bool> CheckHealthAsync()
+    {
+        try
+        {
+            var response = await _httpClient.GetStringAsync("/health");
+
+            return string.Equals(response, "Healthy", StringComparison.OrdinalIgnoreCase);
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
 }

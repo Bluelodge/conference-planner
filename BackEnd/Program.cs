@@ -14,6 +14,9 @@ var services = builder.Services;
 
 services.AddSqlite<ApplicationDbContext>(connectionString);
 
+// HealthCheck
+builder.Services.AddHealthChecks().AddDbContextCheck<ApplicationDbContext>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(options =>
@@ -36,5 +39,7 @@ app.MapSpeakerEndpoints();
 app.MapSessionEndpoints();
 app.MapAttendeeEndpoints();
 app.MapSearchEndpoints();
+
+app.MapHealthChecks("/health");
 
 app.Run();

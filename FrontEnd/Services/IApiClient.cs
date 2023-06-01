@@ -24,4 +24,7 @@ public interface IApiClient
     // Search
     Task<List<SearchResult>> SearchAsync(string term);
 
+    // Health
+    Task<bool> CheckHealthAsync();
+
 }

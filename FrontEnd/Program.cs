@@ -1,6 +1,7 @@
 using FrontEnd.Data;
 using FrontEnd.Services;
 using FrontEnd.Middleware;
+using FrontEnd.HealthChecks;
 using FrontEnd.Areas.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,11 @@ var connectionString = builder.Configuration
 var services = builder.Services;
 services.AddDbContext<IdentityDbContext>(options =>
     options.UseSqlite(connectionString));
+
+// Helath Checks
+builder.Services.AddHealthChecks()
+    .AddCheck<BackendHealthCheck>("backend")
+    .AddDbContextCheck<IdentityDbContext>();
 
 // Identity
 services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -64,5 +70,7 @@ app.UseAuthorization();
 app.UseMiddleware<RequireLoginMiddleware>();
 
 app.MapRazorPages();
+
+app.MapHealthChecks("/health");
 
 app.Run();
