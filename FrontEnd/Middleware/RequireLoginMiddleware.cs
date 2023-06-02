@@ -16,20 +16,26 @@ public class RequireLoginMiddleware
     public Task Invoke(HttpContext context)
     {
         var endpoint = context.GetEndpoint();
+        var isAdmin = context.User.IsAdmin();
 
-        if (context.User.Identity.IsAuthenticated && endpoint?.Metadata.GetMetadata<SkipWelcomeAttribute>() == null)
+        // User authenticated but not an Attendee
+        // Admin is not required to make itself an Attendee
+        // For pages that aren't marked to skip attendee welcome
+        if (context.User.Identity.IsAuthenticated
+            && !isAdmin
+            && endpoint?.Metadata.GetMetadata<SkipWelcomeAttribute>() == null)
         {
             var isAttendee = context.User.IsAttendee();
 
+            // No attendee registered for this user
             if (!isAttendee)
             {
+                // Redirect to Welcome
                 var url = _linkGenerator.GetUriByPage(context, page: "/Welcome");
-                // No attendee registered for this user
                 context.Response.Redirect(url);
 
                 return Task.CompletedTask;
             }
-
         }
 
         return _next(context);
