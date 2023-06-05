@@ -11,7 +11,7 @@ cd BackEnd
 dotnet ef database update
 ```
 
-:white_medium_square: Run BackEnd and add conference info using [Techorama template](BackEnd/Data/TechoramaDataLoader.cs).
+:white_medium_square: Run BackEnd and add conference info using [Techorama template](ConferenceDTO/TechoramaData.json).
 
 :white_medium_square: Create intial Sqlite database schema for FrontEnd.
 ```
